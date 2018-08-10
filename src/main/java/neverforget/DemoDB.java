@@ -22,27 +22,36 @@ public class DemoDB {
         // nothing here
     }
 
-    public static void demoCreate(String obiect, String locatie) throws ClassNotFoundException, SQLException {
+    public static int demoCreate(String obiect, String locatie){
 
-        // 1. load driver, no longer needed in new versions of JDBC
-        Class.forName("org.postgresql.Driver");
+        int rowsInserted=-1;
+        try {
+
+            // 1. load driver, no longer needed in new versions of JDBC
+            Class.forName("org.postgresql.Driver");
 
 
+            // 3. obtain a connection
+            Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
 
-        // 3. obtain a connection
-        Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+            // 4. create a query statement
+            PreparedStatement pSt = conn.prepareStatement("INSERT INTO neverforget (obiect, locatie) VALUES (?,?)");
+            pSt.setString(1, obiect);
+            pSt.setString(2, locatie);
 
-        // 4. create a query statement
-        PreparedStatement pSt = conn.prepareStatement("INSERT INTO neverforget (obiect, locatie) VALUES (?,?)");
-        pSt.setString(1, obiect);
-        pSt.setString(2, locatie);
+            // 5. execute a prepared statement
+           rowsInserted= pSt.executeUpdate();
 
-        // 5. execute a prepared statement
-        int rowsInserted = pSt.executeUpdate();
+            // 6. close the objects
+            pSt.close();
+            conn.close();
 
-        // 6. close the objects
-        pSt.close();
-        conn.close();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return rowsInserted;
     }
 
     public static List<Neverforget> demoRead() throws ClassNotFoundException, SQLException {

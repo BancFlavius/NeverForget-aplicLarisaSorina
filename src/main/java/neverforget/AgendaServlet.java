@@ -120,13 +120,9 @@ public class AgendaServlet extends HttpServlet {
         String obiect = request.getParameter("obiect");
         String locatie = request.getParameter("locatie");
 
-        try {
+
             DemoDB.demoCreate(obiect,locatie);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+
 //        ToDoListDBAccess atl = new ToDoListDBAccess();
 //        atl.insertTaskList(value, iduser);
 
